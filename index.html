@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste de Médicaments</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.colors.min.css">
+</head>
+
+<body>
+    <main class="container">
+        <h1>Liste de Médicaments</h1>
+        <input type="text" id="searchBox" placeholder="Rechercher des médicaments..." oninput="filterItems()">
+
+        <table class="overflow-auto">
+            <thead>
+                <tr>
+                    <th scope="col" class="pico-color-violet-600"><b>Original (Générique)</b></th>
+                    <th scope="col" class=""><b>Catégorie</b></th>
+                    <th scope="col" class="pico-color-green-350"><b>MV</b></th>
+                </tr>
+            </thead>
+            <tbody id="itemsList">
+            </tbody>
+            <tfoot>
+            </tfoot>
+        </table>
+    </main>
+
+    <script>
+        const itemsListElement = document.getElementById('itemsList');
+
+        function renderItems(items) {
+            itemsListElement.innerHTML = '';
+            items.forEach(item => {
+                const div = document.createElement('tr');
+                div.setAttribute("scope", "row");
+
+                const nameElement = document.createElement('th');
+                nameElement.textContent = `${item.brand_name} (${item.generic_name})`;
+
+                const categoryElement = document.createElement('td');
+                categoryElement.textContent = item.category || 'N/A';
+
+                const bestSellerElement = document.createElement('td');
+                if (item.best_seller) {
+                    bestSellerElement.textContent = '✔️';
+                }
+
+                // Add all the components to the item div
+                div.appendChild(nameElement);
+                div.appendChild(categoryElement);
+                div.appendChild(bestSellerElement);
+
+                // Append item to the list
+                itemsListElement.appendChild(div);
+            });
+        }
+
+        function filterItems() {
+            const query = document.getElementById('searchBox').value.toLowerCase();
+            const filteredItems = jsonData.filter(item => item.brand_name.toLowerCase().includes(query) || item.generic_name.toLowerCase().includes(query) || item.category.toLowerCase().includes(query));
+            renderItems(filteredItems);
+        }
+
+        let jsonData;
+        fetch('data.json')
+            .then(response => response.json())
+            .then(data => {
+                jsonData = data.medications;
+                renderItems(jsonData);
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement du fichier JSON:', error);
+            });
+    </script>
+</body>
+
+</html>
