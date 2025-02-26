@@ -7,14 +7,20 @@
     <title>Liste de Médicaments</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.colors.min.css">
+    <style>
+        table {
+            border-collapse: separate;
+            border-spacing: 2px;
+        }
+    </style>
 </head>
 
 <body>
-    <main class="container">
+    <main class="container" style="max-width: 1100px;">
         <h1>Liste de Médicaments</h1>
         <input type="text" id="searchBox" placeholder="Rechercher des médicaments..." oninput="filterItems()">
 
-        <table class="overflow-auto">
+        <table class="overflow-auto striped">
             <thead>
                 <tr>
                     <th scope="col" class="pico-color-violet-600"><b>Original (Générique)</b></th>
